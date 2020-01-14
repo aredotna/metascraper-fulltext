@@ -1,6 +1,6 @@
 "use strict";
 
-const { memoizeOne, composeRule } = require("@metascraper/helpers");
+const { memoizeOne, composeRule, toRule } = require("@metascraper/helpers");
 
 const Readability = require("readability");
 const jsdom = require("jsdom");
@@ -15,10 +15,18 @@ const readability = memoizeOne(($, url) => {
   return reader.parse();
 });
 
-const getReadbility = composeRule(readability);
-
 module.exports = () => {
   return {
-    content: getReadbility({ from: "content" })
+    content: [
+      ({ htmlDom, url }) => {
+        const { content, textContent } = readability(htmlDom, url);
+        return {
+          html: content,
+          text: textContent
+        };
+      }
+    ]
   };
 };
+
+module.exports.fulltext = readability;

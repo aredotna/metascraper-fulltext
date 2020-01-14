@@ -30,6 +30,9 @@
   "engines": {
     "node": ">= 8"
   },
+  "scripts": {
+    "test": "NODE_PATH=.. TZ=UTC NODE_ENV=test mocha test"
+  },
   "files": [
     "index.js"
   ]
